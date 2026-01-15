@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To-Do App with Categories</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>To-Do List with Categories</h1>
+
+    <!-- Form to add a new task -->
+    <form id="todo-form">
+      <input type="text" id="todo-input" placeholder="New task" required />
+      <select id="category-select">
+        <option value="Work">Work</option>
+        <option value="Personal">Personal</option>
+        <option value="Important">Important</option>
+      </select>
+      <button type="submit">Add</button>
+    </form>
+
+    <!-- Search bar -->
+    <input type="text" id="search-input" placeholder="Search tasks" />
+
+    <!-- Task list -->
+    <ul id="todo-list"></ul>
+
+    <script>
+      // JavaScript for handling tasks
+      const form = document.getElementById("todo-form");
+      const input = document.getElementById("todo-input");
+      const categorySelect = document.getElementById("category-select");
+      const searchInput = document.getElementById("search-input");
+      const list = document.getElementById("todo-list");
+
+      async function fetchTodos(search = "") {
+        const res = await fetch(`/todos?search=${search}`);
+        const todos = await res.json();
+        list.innerHTML = "";
+        todos.forEach((todo) => {
+          const li = document.createElement("li");
+          li.className = `todo ${todo.completed ? "completed" : ""}`;
+          li.innerHTML = `
+          <span>${todo.title} <span class="category">(${
+            todo.category
+          })</span></span>
+          <div>
+            <button onclick="toggleComplete(${todo.id})">${
+            todo.completed ? "Undo" : "Complete"
+          }</button>
+            <button onclick="editTodo(${todo.id}, '${
+            todo.title
+          }')">Edit</button>
+            <button onclick="deleteTodo(${todo.id})">Delete</button>
+          </div>
+        `;
+          list.appendChild(li);
+        });
+      }
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const title = input.value;
+        const category = categorySelect.value;
+        await fetch("/todos", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ title, category }),
+        });
+        input.value = "";
+        fetchTodos();
+      });
+
+      searchInput.addEventListener("input", () => {
+        fetchTodos(searchInput.value);
+      });
+
+      async function toggleComplete(id) {
+        await fetch(`/todos/${id}`, { method: "PUT" });
+        fetchTodos();
+      }
+
+      async function editTodo(id, currentTitle) {
+        const newTitle = prompt("Edit task title:", currentTitle);
+        if (newTitle) {
+          await fetch(`/todos/${id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ title: newTitle }),
+          });
+          fetchTodos();
+        }
+      }
+
+      async function deleteTodo(id) {
+        await fetch(`/todos/${id}`, { method: "DELETE" });
+        fetchTodos();
+      }
+
+      fetchTodos();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1661957812345,
+    "title": "Finish Cypress tests",
+    "category": "Work",
+    "completed": true
+  },
+  {
+    "id": 1661957812347,
+    "title": "Prepare presentation for meeting",
+    "category": "Work",
+    "completed": false
+  },
+  {
+    "id": 1661957812348,
+    "title": "Call mom",
+    "category": "Personal",
+    "completed": false
+  },
+  {
+    "id": 1732982204752,
+    "title": "sdasadsa",
+    "category": "Work",
+    "completed": false
+  }
+]
