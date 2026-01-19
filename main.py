@@ -1,10 +1,4 @@
-import json
-from statement import statement
+from theater.interfaces.client import main
 
-with open("plays.json") as f:
-    plays = json.load(f)
-
-with open("invoices.json") as f:
-    invoices = json.load(f)
-
-print(statement(invoices[0], plays))
+if __name__ == "__main__":
+    main()

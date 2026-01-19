@@ -1,25 +1,30 @@
-# Context
+# Theater Billing System
 
-You as a developer get to see this code.
-What would you do differently and why?
+Refactored theater statement generator with clean architecture.
 
-**⚠You can change everything you want however you would like to.**
+## Setup
 
-# Alternatives
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
 
-You can choose between the different languages:
+## Usage
 
-- Javascript
-- Java
-- C#
-- C++
-- Python
+```bash
+# Print to console
+python3 main.py generate-statements
 
-There are also excercises concerning:
+# Save to file
+python3 main.py generate-statements -o output.txt
+```
 
-- Dockerization
-- Test automation
+## Structure
 
-# The Use Case
-
-We can book tickets for some kind of entertainment show and might get some kind of reward for booking a larger amount of tickets
+- `theater/models/` - Domain models (Pydantic)
+- `theater/domain/` - Business logic
+- `theater/application/` - Services
+- `theater/infrastructure/` - Data access & rendering
+- `theater/interfaces/` - CLI client
+- `data/` - JSON data files
