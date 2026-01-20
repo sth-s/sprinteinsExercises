@@ -49,3 +49,6 @@ class Repository:
         except OSError as e:
             logging.error(f"OS error reading file {file_path}: {e}")
             raise
+        except Exception as e:
+            logging.error(f"Unexpected error reading file {file_path}: {e}")
+            raise

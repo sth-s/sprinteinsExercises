@@ -1,9 +1,7 @@
-import math
 from theater.models.invoice import Performance
 from theater.models.play import Play
 from theater.models.rules import AmountRules, CreditsRules, PricingRules
 from theater.models.statement import PerformanceResult
-
 
 class StatementCalculator:
     def calculate(self, performance: Performance, play: Play, rules: PricingRules) -> PerformanceResult:
