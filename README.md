@@ -10,6 +10,13 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
+## Tests
+
+```bash
+# Simple tests
+pytest tests/unit/ -v
+```
+
 ## Usage
 
 ```bash
