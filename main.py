@@ -1,10 +1,20 @@
-import json
-from statement import statement
+from pathlib import Path
+from utils.io_helper import IOHelper
+from utils.statement import StatementGenerator
 
-with open("plays.json") as f:
-    plays = json.load(f)
 
-with open("invoices.json") as f:
-    invoices = json.load(f)
+def main():
+    io_helper = IOHelper(Path("data"))
+    statement_generator = StatementGenerator()
 
-print(statement(invoices[0], plays))
+    plays = io_helper.get_plays_dict()
+    pricing_rules = io_helper.get_pricing_rules_dict()
+
+    invoices = io_helper.get_invoices()
+
+    statements = statement_generator.generate_statement(invoices, plays, pricing_rules)
+
+    print(io_helper.text_statements_render(statements))
+
+if __name__ == "__main__":
+    main()

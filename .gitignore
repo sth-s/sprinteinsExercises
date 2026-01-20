@@ -22,3 +22,24 @@
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Python #
+##########
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+env/
+.env
+
+# IDE #
+#######
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
