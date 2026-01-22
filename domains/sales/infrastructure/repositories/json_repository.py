@@ -3,9 +3,9 @@ import logging
 from pathlib import Path
 from typing import Dict, List
 
-from theater.infrastructure.repositories.repository_interface import RepositoryInterface
-from theater.models.invoice import Invoice, Performance
-from theater.models.play import Play
+from domains.sales.infrastructure.repositories.repository_interface import RepositoryInterface
+from domains.sales.models.invoice import Invoice, Performance
+from domains.sales.models.play import Play
 
 class JSONRepository(RepositoryInterface):
     def __init__(self, data_dir: Path):

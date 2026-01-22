@@ -6,7 +6,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 from sqlmodel import Session, select
 from shared.infrastructure.database import Database
-from theater.infrastructure.repositories.orm_models import PlayType, Play, Customer, Invoice, Performance
+from domains.sales.infrastructure.repositories.orm_models import PlayType, Play, Customer, Invoice, Performance
 
 PLAYS = [
     ("macbeth", "Macbeth", "tragedy"),

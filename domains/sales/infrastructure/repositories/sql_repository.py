@@ -6,11 +6,11 @@ from sqlmodel import select, Session
 from sqlalchemy.orm import selectinload
 from sqlalchemy.future import Engine
 
-from theater.infrastructure.repositories.repository_interface import RepositoryInterface
-from theater.infrastructure.repositories.orm_models import Invoice as DBInvoice, Play as DBPlay, Performance as DBPerformance
+from domains.sales.infrastructure.repositories.repository_interface import RepositoryInterface
+from domains.sales.infrastructure.repositories.orm_models import Invoice as DBInvoice, Play as DBPlay, Performance as DBPerformance
 
-from theater.models.invoice import Invoice as DomainInvoice, Performance as DomainPerformance
-from theater.models.play import Play as DomainPlay
+from domains.sales.models.invoice import Invoice as DomainInvoice, Performance as DomainPerformance
+from domains.sales.models.play import Play as DomainPlay
 
 class SQLRepository(RepositoryInterface):
     def __init__(self, engine: Engine, data_dir: Path):

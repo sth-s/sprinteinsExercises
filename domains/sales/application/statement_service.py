@@ -1,9 +1,9 @@
 import logging
 from pathlib import Path
 from typing import List
-from theater.infrastructure.repositories.repository_interface import RepositoryInterface
-from theater.domain.statements_generator_service import StatementsGeneratorService
-from theater.infrastructure.text_renderer import TextRenderer
+from domains.sales.infrastructure.repositories.repository_interface import RepositoryInterface
+from domains.sales.domain.statements_generator_service import StatementsGeneratorService
+from domains.sales.infrastructure.text_renderer import TextRenderer
 
 class StatementService:
 

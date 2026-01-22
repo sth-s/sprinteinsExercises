@@ -1,9 +1,9 @@
 import pytest
-from theater.domain.calculators.tragedy_calculator import TragedyCalculator
-from theater.domain.calculators.comedy_calculator import ComedyCalculator
-from theater.domain.calculators.calculator_factory import CalculatorFactory
-from theater.models.invoice import Performance
-from theater.models.play import Play
+from domains.sales.domain.calculators.tragedy_calculator import TragedyCalculator
+from domains.sales.domain.calculators.comedy_calculator import ComedyCalculator
+from domains.sales.domain.calculators.calculator_factory import CalculatorFactory
+from domains.sales.models.invoice import Performance
+from domains.sales.models.play import Play
 
 
 def test_tragedy_calculation():

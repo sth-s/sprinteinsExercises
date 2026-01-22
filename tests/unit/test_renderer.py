@@ -1,7 +1,7 @@
 import pytest
-from theater.infrastructure.text_renderer import TextRenderer
-from theater.models.statement import Statement, PerformanceResult
-from theater.models.play import Play
+from domains.sales.infrastructure.text_renderer import TextRenderer
+from domains.sales.models.statement import Statement, PerformanceResult
+from domains.sales.models.play import Play
 
 
 def test_render_single_statement():

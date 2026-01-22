@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from theater.models.play import Play
+from domains.sales.models.play import Play
 from typing import List
 
 class PerformanceResult(BaseModel):

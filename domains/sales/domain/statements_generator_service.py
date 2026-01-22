@@ -1,8 +1,8 @@
 from typing import List, Dict
-from theater.domain.calculators import CalculatorFactory
-from theater.models.invoice import Invoice
-from theater.models.play import Play
-from theater.models.statement import Statement
+from domains.sales.domain.calculators import CalculatorFactory
+from domains.sales.models.invoice import Invoice
+from domains.sales.models.play import Play
+from domains.sales.models.statement import Statement
 
 class StatementsGeneratorService:
     

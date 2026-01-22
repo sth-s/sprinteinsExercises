@@ -1,12 +1,12 @@
 import pytest
 from pathlib import Path
 from unittest.mock import Mock
-from theater.application.statement_service import StatementService
-from theater.infrastructure.repositories.repository_interface import RepositoryInterface
-from theater.infrastructure.text_renderer import TextRenderer
-from theater.domain.statements_generator_service import StatementsGeneratorService
-from theater.models.invoice import Invoice, Performance
-from theater.models.play import Play
+from domains.sales.application.statement_service import StatementService
+from domains.sales.infrastructure.repositories.repository_interface import RepositoryInterface
+from domains.sales.infrastructure.text_renderer import TextRenderer
+from domains.sales.domain.statements_generator_service import StatementsGeneratorService
+from domains.sales.models.invoice import Invoice, Performance
+from domains.sales.models.play import Play
 
 
 @pytest.fixture

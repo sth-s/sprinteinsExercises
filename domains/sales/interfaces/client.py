@@ -3,10 +3,10 @@ import argparse
 from pathlib import Path
 from typing import Optional
 
-from theater.application.statement_service import StatementService
-from theater.domain.statements_generator_service import StatementsGeneratorService
-from theater.infrastructure.repositories import RepositoryFactory, RepositoryInterface
-from theater.infrastructure.text_renderer import TextRenderer
+from domains.sales.application.statement_service import StatementService
+from domains.sales.domain.statements_generator_service import StatementsGeneratorService
+from domains.sales.infrastructure.repositories import RepositoryFactory, RepositoryInterface
+from domains.sales.infrastructure.text_renderer import TextRenderer
 from shared.infrastructure.database import Database
 
 def generate_statements(repository: RepositoryInterface, generator: StatementsGeneratorService, renderer: TextRenderer, output_file: Path = None):

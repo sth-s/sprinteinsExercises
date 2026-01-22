@@ -4,7 +4,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 from shared.infrastructure.database import Database
-from theater.interfaces import client
+from domains.sales.interfaces import client
 
 def main():
     load_dotenv()

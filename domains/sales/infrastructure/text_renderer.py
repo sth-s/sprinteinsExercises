@@ -1,6 +1,6 @@
 import os
 from typing import List
-from theater.models.statement import Statement
+from domains.sales.models.statement import Statement
 
 class TextRenderer:
     def text_statements_render(self, statements: List[Statement]) -> str:

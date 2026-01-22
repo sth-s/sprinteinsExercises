@@ -1,8 +1,8 @@
 from pathlib import Path
 from typing import Optional, Dict, Callable
-from theater.infrastructure.repositories.repository_interface import RepositoryInterface
-from theater.infrastructure.repositories.json_repository import JSONRepository
-from theater.infrastructure.repositories.sql_repository import SQLRepository
+from domains.sales.infrastructure.repositories.repository_interface import RepositoryInterface
+from domains.sales.infrastructure.repositories.json_repository import JSONRepository
+from domains.sales.infrastructure.repositories.sql_repository import SQLRepository
 from shared.infrastructure.database import Database
 
 
