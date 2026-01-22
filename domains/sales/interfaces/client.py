@@ -1,7 +1,7 @@
 import sys
 import argparse
 from pathlib import Path
-from typing import Optional
+from typing import Optional, List
 
 from domains.sales.application.statement_service import StatementService
 from domains.sales.domain.statements_generator_service import StatementsGeneratorService
@@ -9,7 +9,13 @@ from domains.sales.infrastructure.repositories import RepositoryFactory, Reposit
 from domains.sales.infrastructure.text_renderer import TextRenderer
 from shared.infrastructure.database import Database
 
-def generate_statements(repository: RepositoryInterface, generator: StatementsGeneratorService, renderer: TextRenderer, output_file: Path = None):
+
+def generate_statements(
+    repository: RepositoryInterface, 
+    generator: StatementsGeneratorService, 
+    renderer: TextRenderer, 
+    output_file: Optional[Path] = None
+):
     try:
         statements = StatementService(repository, generator, renderer).generate_statements(output_file)
         print(statements)
@@ -17,7 +23,8 @@ def generate_statements(repository: RepositoryInterface, generator: StatementsGe
         print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)
 
-def run(repo_type: str, database: Optional[Database], data_dir: Path):    
+
+def run(repo_type: str, database: Optional[Database], data_dir: Path, args: List[str]):
     try:
         repository = RepositoryFactory.create(repo_type, data_dir, database)
     except Exception as e:
@@ -27,17 +34,17 @@ def run(repo_type: str, database: Optional[Database], data_dir: Path):
     generator = StatementsGeneratorService()
     renderer = TextRenderer()
 
-    parser = argparse.ArgumentParser(description='Theater client')
-    subparsers = parser.add_subparsers(dest='command', required=True)
+    parser = argparse.ArgumentParser(prog="main.py sales", description="Sales domain")
+    subparsers = parser.add_subparsers(dest="command", required=True)
     
-    stmt_parser = subparsers.add_parser('generate-statements', help='Generate statements')
-    stmt_parser.add_argument('--output', '-o', type=Path, help='Output file')
+    stmt_parser = subparsers.add_parser("generate-statements", help="Generate statements")
+    stmt_parser.add_argument("--output", "-o", type=Path, help="Output file")
     stmt_parser.set_defaults(func=lambda args: generate_statements(repository, generator, renderer, args.output))
 
-    args = parser.parse_args()
+    parsed_args = parser.parse_args(args)
     
     try:
-        args.func(args)
+        parsed_args.func(parsed_args)
     except Exception as e:
         print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)
