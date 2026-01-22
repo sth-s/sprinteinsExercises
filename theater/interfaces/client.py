@@ -1,12 +1,15 @@
 import sys
 import argparse
 from pathlib import Path
+from typing import Optional
+
 from theater.application.statement_service import StatementService
 from theater.domain.statements_generator_service import StatementsGeneratorService
-from theater.infrastructure.repository import Repository
+from theater.infrastructure.repositories import RepositoryFactory, RepositoryInterface
 from theater.infrastructure.text_renderer import TextRenderer
+from shared.infrastructure.database import Database
 
-def generate_statements(repository: Repository, generator: StatementsGeneratorService, renderer: TextRenderer, output_file: Path = None):
+def generate_statements(repository: RepositoryInterface, generator: StatementsGeneratorService, renderer: TextRenderer, output_file: Path = None):
     try:
         statements = StatementService(repository, generator, renderer).generate_statements(output_file)
         print(statements)
@@ -14,9 +17,13 @@ def generate_statements(repository: Repository, generator: StatementsGeneratorSe
         print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)
 
+def run(repo_type: str, database: Optional[Database], data_dir: Path):    
+    try:
+        repository = RepositoryFactory.create(repo_type, data_dir, database)
+    except Exception as e:
+        print(f"Repository Initialization Error: {e}", file=sys.stderr)
+        sys.exit(1)
 
-def main():
-    repository = Repository(Path("data"))
     generator = StatementsGeneratorService()
     renderer = TextRenderer()
 
@@ -34,7 +41,3 @@ def main():
     except Exception as e:
         print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)
-
-
-if __name__ == "__main__":
-    main()

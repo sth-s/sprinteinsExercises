@@ -1,10 +1,10 @@
-from .calculator_interface import IPerformanceCalculator
+from .calculator_interface import PerformanceCalculatorInterface
 from theater.models.invoice import Performance
 from theater.models.play import Play
 from theater.models.statement import PerformanceResult
 
 
-class TragedyCalculator(IPerformanceCalculator):
+class TragedyCalculator(PerformanceCalculatorInterface):
     
     BASE_AMOUNT = 40000
     AUDIENCE_THRESHOLD = 30

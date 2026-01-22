@@ -4,7 +4,7 @@ from theater.models.play import Play
 from theater.models.statement import PerformanceResult
 
 
-class IPerformanceCalculator(ABC):
+class PerformanceCalculatorInterface(ABC):
     
     @abstractmethod
     def calculate(self, performance: Performance, play: Play) -> PerformanceResult:

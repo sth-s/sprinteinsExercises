@@ -1,1 +1,2 @@
 from .calculator_factory import CalculatorFactory
+from .calculator_interface import PerformanceCalculatorInterface

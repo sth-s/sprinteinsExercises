@@ -1,10 +1,10 @@
-from .calculator_interface import IPerformanceCalculator
+from .calculator_interface import PerformanceCalculatorInterface
 from theater.models.invoice import Performance
 from theater.models.play import Play
 from theater.models.statement import PerformanceResult
 
 
-class ComedyCalculator(IPerformanceCalculator):
+class ComedyCalculator(PerformanceCalculatorInterface):
     
     BASE_AMOUNT = 30000
     BASE_PER_PERSON = 300

@@ -1,13 +1,13 @@
 import logging
 from pathlib import Path
 from typing import List
-from theater.infrastructure.repository import Repository
+from theater.infrastructure.repositories.repository_interface import RepositoryInterface
 from theater.domain.statements_generator_service import StatementsGeneratorService
 from theater.infrastructure.text_renderer import TextRenderer
 
 class StatementService:
 
-    def __init__(self, repository: Repository, generator: StatementsGeneratorService, renderer: TextRenderer):
+    def __init__(self, repository: RepositoryInterface, generator: StatementsGeneratorService, renderer: TextRenderer):
         self.repository = repository
         self.generator = generator
         self.renderer = renderer
