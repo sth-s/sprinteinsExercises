@@ -16,9 +16,8 @@ class StatementService:
         try:
             invoices = self.repository.get_invoices()
             plays = self.repository.get_plays_dict()
-            pricing_rules = self.repository.get_pricing_rules_dict()
 
-            statements = self.generator.generate_statements(invoices, plays, pricing_rules)
+            statements = self.generator.generate_statements(invoices, plays)
 
             result = self.renderer.text_statements_render(statements)
 

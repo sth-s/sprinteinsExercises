@@ -1,77 +1,54 @@
 import pytest
-from theater.domain.statement_calculator import StatementCalculator
+from theater.domain.calculators.tragedy_calculator import TragedyCalculator
+from theater.domain.calculators.comedy_calculator import ComedyCalculator
+from theater.domain.calculators.calculator_factory import CalculatorFactory
 from theater.models.invoice import Performance
 from theater.models.play import Play
-from theater.models.rules import PricingRules, AmountRules, CreditsRules
 
 
 def test_tragedy_calculation():
-    calculator = StatementCalculator()
+    calculator = TragedyCalculator()
     performance = Performance(play_id="hamlet", audience=55)
     play = Play(play_id="hamlet", name="Hamlet", type="tragedy")
-    rules = PricingRules(
-        amount=AmountRules(
-            base_amount=40000,
-            base_coefficient=0,
-            audience_threshold_amount=30,
-            threshold_amount=0,
-            threshold_coefficient=1000
-        ),
-        credits=CreditsRules(
-            audience_threshold_credits=30,
-            credits_divisor=1
-        )
-    )
     
-    result = calculator.calculate(performance, play, rules)
+    result = calculator.calculate(performance, play)
     
     assert result.amount == 65000
-    assert result.credits == 80
+    assert result.credits == 25
 
 
 def test_comedy_calculation():
-    calculator = StatementCalculator()
+    calculator = ComedyCalculator()
     performance = Performance(play_id="as-like", audience=35)
     play = Play(play_id="as-like", name="As You Like It", type="comedy")
-    rules = PricingRules(
-        amount=AmountRules(
-            base_amount=30000,
-            base_coefficient=300,
-            audience_threshold_amount=20,
-            threshold_amount=10000,
-            threshold_coefficient=500
-        ),
-        credits=CreditsRules(
-            audience_threshold_credits=20,
-            credits_divisor=5
-        )
-    )
     
-    result = calculator.calculate(performance, play, rules)
+    result = calculator.calculate(performance, play)
     
     assert result.amount == 58000
-    assert result.credits == 22
+    assert result.credits == 12
 
 
-def test_small_audience():
-    calculator = StatementCalculator()
+def test_tragedy_small_audience():
+    calculator = TragedyCalculator()
     performance = Performance(play_id="othello", audience=15)
     play = Play(play_id="othello", name="Othello", type="tragedy")
-    rules = PricingRules(
-        amount=AmountRules(
-            base_amount=40000,
-            base_coefficient=0,
-            audience_threshold_amount=30,
-            threshold_amount=0,
-            threshold_coefficient=1000
-        ),
-        credits=CreditsRules(
-            audience_threshold_credits=30,
-            credits_divisor=1
-        )
-    )
     
-    result = calculator.calculate(performance, play, rules)
+    result = calculator.calculate(performance, play)
     
     assert result.amount == 40000
-    assert result.credits == 15
+    assert result.credits == 0
+
+
+def test_calculator_factory_tragedy():
+    calculator = CalculatorFactory.get_calculator("tragedy")
+    assert isinstance(calculator, TragedyCalculator)
+
+
+def test_calculator_factory_comedy():
+    calculator = CalculatorFactory.get_calculator("comedy")
+    assert isinstance(calculator, ComedyCalculator)
+
+
+def test_calculator_factory_unknown_type():
+    with pytest.raises(ValueError, match="unknown type: musical"):
+        CalculatorFactory.get_calculator("musical")
