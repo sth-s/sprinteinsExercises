@@ -6,6 +6,10 @@ from theater.models.rules import PricingRules
 from theater.models.statement import Statement
 
 class StatementsGeneratorService:
+    
+    def __init__(self, calculator: StatementCalculator = None):
+        self.calculator = calculator or StatementCalculator()
+
     def generate_statements(self, invoices: List[Invoice], plays: Dict[str, Play], pricing_rules: Dict[str, PricingRules]) -> List[Statement]:
         statements = []
         for invoice in invoices:
@@ -20,7 +24,7 @@ class StatementsGeneratorService:
                 if not rules:
                     raise ValueError(f"unknown type: {play.type}")
                     
-                result = StatementCalculator().calculate(perf, play, rules)
+                result = self.calculator.calculate(perf, play, rules)
                 performance_results.append(result)
                 
                 total_amount += result.amount

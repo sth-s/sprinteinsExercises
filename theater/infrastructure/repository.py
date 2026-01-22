@@ -52,3 +52,17 @@ class Repository:
         except Exception as e:
             logging.error(f"Unexpected error reading file {file_path}: {e}")
             raise
+
+
+    def save_report(self, report: str, output_file: Path):
+        try:
+            file_path = self.data_dir / output_file
+            file_path.parent.mkdir(parents=True, exist_ok=True)
+            file_path.write_text(report, encoding='utf-8')
+            logging.info(f"Saved to {file_path}")
+        except OSError as e:
+            logging.error(f"OS error writing file {file_path}: {e}")
+            raise
+        except Exception as e:
+            logging.error(f"Unexpected error writing file {file_path}: {e}")
+            raise

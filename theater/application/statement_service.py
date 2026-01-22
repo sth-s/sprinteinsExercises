@@ -4,29 +4,28 @@ from typing import List
 from theater.infrastructure.repository import Repository
 from theater.domain.statements_generator_service import StatementsGeneratorService
 from theater.infrastructure.text_renderer import TextRenderer
-from theater.models.statement import Statement
 
 class StatementService:
-    def generate_statements(self, data_dir: Path, output_file: Path = None) -> List[Statement]:
+
+    def __init__(self, repository: Repository, generator: StatementsGeneratorService, renderer: TextRenderer):
+        self.repository = repository
+        self.generator = generator
+        self.renderer = renderer
+
+    def generate_statements(self, output_file: Path = None) -> str:
         try:
-            repository = Repository(data_dir)
+            invoices = self.repository.get_invoices()
+            plays = self.repository.get_plays_dict()
+            pricing_rules = self.repository.get_pricing_rules_dict()
 
-            invoices = repository.get_invoices()
-            plays = repository.get_plays_dict()
-            pricing_rules = repository.get_pricing_rules_dict()
+            statements = self.generator.generate_statements(invoices, plays, pricing_rules)
 
-            statements = StatementsGeneratorService().generate_statements(invoices, plays, pricing_rules)
-            
-            result = TextRenderer().text_statements_render(statements)
+            result = self.renderer.text_statements_render(statements)
 
             if output_file:
-                output_file.parent.mkdir(parents=True, exist_ok=True)
-                output_file.write_text(result, encoding='utf-8')
-                logging.info(f"Saved to {output_file}")
-                return statements
-            else:
-                print(result, end='')
-                return statements
+                self.repository.save_report(result, output_file)
+
+            return result
 
         except Exception as e:
             logging.error(f"Error: {e}")

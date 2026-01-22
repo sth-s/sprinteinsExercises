@@ -4,15 +4,15 @@ from unittest.mock import Mock
 from theater.application.statement_service import StatementService
 from theater.infrastructure.repository import Repository
 from theater.infrastructure.text_renderer import TextRenderer
-from theater.domain.statement_calculator import StatementCalculator
+from theater.domain.statements_generator_service import StatementsGeneratorService
 from theater.models.invoice import Invoice, Performance
 from theater.models.play import Play
 from theater.models.rules import PricingRules, AmountRules, CreditsRules
 
 
 @pytest.fixture
-def mock_repository(monkeypatch):
-    repo = Repository(Path("data"))
+def mock_repository():
+    repo = Mock(spec=Repository)
     
     invoices = [
         Invoice(
@@ -58,35 +58,33 @@ def mock_repository(monkeypatch):
         )
     }
     
-    monkeypatch.setattr(repo, "get_invoices", lambda: invoices)
-    monkeypatch.setattr(repo, "get_plays_dict", lambda: plays)
-    monkeypatch.setattr(repo, "get_pricing_rules_dict", lambda: rules)
+    repo.get_invoices.return_value = invoices
+    repo.get_plays_dict.return_value = plays
+    repo.get_pricing_rules_dict.return_value = rules
     
     return repo
 
 
-def test_generate_statements_with_mock(mock_repository, monkeypatch):
-    service = StatementService()
-    
-    monkeypatch.setattr("theater.application.statement_service.Repository", lambda x: mock_repository)
-    
-    statements = service.generate_statements(Path("data"))
-    
-    assert len(statements) == 1
-    assert statements[0].customer == "TestCo"
-    assert statements[0].total_amount == 123000
-    assert statements[0].total_credits == 35
-    assert len(statements[0].performance_details) == 2
-
-
-def test_full_render_with_mock(mock_repository, monkeypatch):
+def test_generate_statements_with_mock(mock_repository):
+    generator = StatementsGeneratorService()
     renderer = TextRenderer()
-    service = StatementService()
+    service = StatementService(mock_repository, generator, renderer)
     
-    monkeypatch.setattr("theater.application.statement_service.Repository", lambda x: mock_repository)
+    result = service.generate_statements()
     
-    statements = service.generate_statements(Path("data"))
-    result = renderer.text_statements_render(statements)
+    assert "Statement for TestCo" in result
+    assert "Hamlet:" in result
+    assert "As You Like It:" in result
+    assert "$1,230.00" in result
+    assert "35 credits" in result
+
+
+def test_full_render_with_mock(mock_repository):
+    generator = StatementsGeneratorService()
+    renderer = TextRenderer()
+    service = StatementService(mock_repository, generator, renderer)
+    
+    result = service.generate_statements()
     
     assert "Statement for TestCo" in result
     assert "Hamlet:" in result
