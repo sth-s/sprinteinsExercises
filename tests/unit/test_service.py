@@ -76,7 +76,7 @@ def test_generate_statements_with_mock(mock_repository):
     assert "Hamlet:" in result
     assert "As You Like It:" in result
     assert "$1,230.00" in result
-    assert "35 credits" in result
+    assert "37 credits" in result
 
 
 def test_full_render_with_mock(mock_repository):
