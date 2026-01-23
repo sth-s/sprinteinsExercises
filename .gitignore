@@ -13,6 +13,7 @@
 *.sql
 *.sqlite
 *.db
+*.parquet
 
 # OS generated files #
 ######################
@@ -27,6 +28,7 @@ Thumbs.db
 # Python #
 ##########
 __pycache__/
+.pytest_cache/
 *.py[cod]
 *$py.class
 *.so

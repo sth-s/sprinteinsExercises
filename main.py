@@ -21,7 +21,7 @@ def run_sales(args):
 
 
 def run_analytics(args):
-    analytics_cli.run(DB_PATH, args)
+    analytics_cli.run(DB_PATH, DATA_DIR, args)
 
 
 DOMAINS = {

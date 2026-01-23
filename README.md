@@ -3,6 +3,7 @@
 Theater statement generator with clean architecture.
 
 **Features:**
+- Two domains: **Sales** (transactional) and **Analytics** (Polars columnar)
 - SQLite database with SQLModel ORM
 - Abstract interfaces for repositories and calculators
 - Factory pattern for dependency injection
@@ -18,13 +19,18 @@ cp .env.sample .env
 
 ## Quick Start
 
-For SQL mode, initialize the database first:
 ```bash
+# Initialize database
 python3 -m scripts.init_db
 python3 -m scripts.seed_data  # optional: add test data
 
-python3 main.py generate-statements
-python3 main.py generate-statements -o output.txt
+# Sales: generate billing statements
+python3 main.py sales generate-statements
+python3 main.py sales generate-statements -o output.txt
+
+# Analytics: calculate and save customer reports
+python3 main.py analytics generate-report
+# Saves to data/customer_reports.parquet, prints top 5
 ```
 
 ## Configuration
@@ -37,25 +43,6 @@ Settings in `.env`:
 | `DB_PATH` | SQLite path | `data/theater.db` |
 | `DATA_DIR` | Data folder | `data` |
 
-## Database
-
-Initialize DB (from JSON):
-```bash
-python3 -m scripts.init_db
-```
-
-Add test data:
-```bash
-python3 -m scripts.seed_data
-```
-
-## Usage
-
-```bash
-python3 main.py generate-statements
-python3 main.py generate-statements -o output.txt
-```
-
 ## Tests
 
 ```bash
@@ -65,25 +52,24 @@ pytest tests/unit/ -v
 ## Architecture
 
 ```
-theater/
-├── models/           # Domain models (Pydantic)
-├── domain/           # Business logic
-│   └── calculators/  # PerformanceCalculatorInterface + implementations
-├── application/      # Services
-├── infrastructure/   
-│   └── repositories/ # RepositoryInterface + JSON/SQL implementations
-└── interfaces/       # CLI client
+domains/
+├── sales/              # Transactional billing
+│   ├── models/         # Domain models (Pydantic)
+│   ├── domain/         # Business logic + calculators
+│   ├── application/    # Services
+│   ├── infrastructure/ # Repositories (JSON/SQL)
+│   └── interfaces/     # CLI client
+│
+└── analytics/          # Read-only Polars analytics
+    ├── domain/         # Calculator strategies (Polars Expr)
+    ├── services/       # RevenueService (DataFrame in/out)
+    ├── infrastructure/ # DataLoader + ReportWriter
+    └── interfaces/     # CLI (top 5 + save)
 
 shared/
-└── infrastructure/   # Database connection
+└── infrastructure/     # Database connection
 
 scripts/
-├── init_db.py        # Create DB from JSON
-└── seed_data.py      # Additional test data
+├── init_db.py          # Create DB from JSON
+└── seed_data.py        # Additional test data
 ```
-
-## Abstractions
-
-- `RepositoryInterface` — data access abstraction (JSON/SQL)
-- `PerformanceCalculatorInterface` — calculators for different play types
-- `RepositoryFactory` / `CalculatorFactory` — factories for creating implementations
