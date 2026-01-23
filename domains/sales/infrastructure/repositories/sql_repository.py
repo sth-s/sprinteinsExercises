@@ -66,3 +66,31 @@ class SQLRepository(RepositoryInterface):
         except Exception as e:
             logging.error(f"Error writing report: {e}")
             raise
+
+    def add_invoice(self, customer: str, performances: List[dict]) -> int:
+        from domains.sales.infrastructure.repositories.orm_models import Customer
+        
+        with Session(self.engine) as session:
+            db_customer = session.exec(
+                select(Customer).where(Customer.name == customer)
+            ).first()
+            
+            if not db_customer:
+                db_customer = Customer(name=customer)
+                session.add(db_customer)
+                session.flush()
+            
+            invoice = DBInvoice(customer_id=db_customer.id)
+            session.add(invoice)
+            session.flush()
+            
+            for perf in performances:
+                db_perf = DBPerformance(
+                    invoice_id=invoice.id,
+                    play_id=perf["play_id"],
+                    audience=perf["audience"]
+                )
+                session.add(db_perf)
+            
+            session.commit()
+            return invoice.id

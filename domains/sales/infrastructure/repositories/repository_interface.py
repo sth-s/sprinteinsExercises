@@ -18,3 +18,8 @@ class RepositoryInterface(ABC):
     @abstractmethod
     def save_report(self, report: str, output_file: Path):
         pass
+
+    @abstractmethod
+    def add_invoice(self, customer: str, performances: List[dict]) -> int:
+        """Add a new invoice with performances. Returns invoice ID."""
+        pass

@@ -50,3 +50,21 @@ class JSONRepository(RepositoryInterface):
         except Exception as e:
             logging.error(f"Error reading {file_path}: {e}")
             raise
+
+    def add_invoice(self, customer: str, performances: List[dict]) -> int:
+        file_path = self.data_dir / "invoices.json"
+        data = self._load_json("invoices.json")
+        
+        new_invoice = {
+            "customer": customer,
+            "performances": [
+                {"playID": p["play_id"], "audience": p["audience"]}
+                for p in performances
+            ]
+        }
+        data.append(new_invoice)
+        
+        with file_path.open("w", encoding="utf-8") as f:
+            json.dump(data, f, indent=2)
+        
+        return len(data)
