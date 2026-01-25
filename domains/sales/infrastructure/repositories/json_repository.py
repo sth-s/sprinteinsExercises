@@ -51,15 +51,15 @@ class JSONRepository(RepositoryInterface):
             logging.error(f"Error reading {file_path}: {e}")
             raise
 
-    def add_invoice(self, customer: str, performances: List[dict]) -> int:
+    def add_invoice(self, invoice: Invoice) -> int:
         file_path = self.data_dir / "invoices.json"
         data = self._load_json("invoices.json")
         
         new_invoice = {
-            "customer": customer,
+            "customer": invoice.customer,
             "performances": [
-                {"playID": p["play_id"], "audience": p["audience"]}
-                for p in performances
+                {"playID": p.play_id, "audience": p.audience}
+                for p in invoice.performances
             ]
         }
         data.append(new_invoice)

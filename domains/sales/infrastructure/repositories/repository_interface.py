@@ -20,6 +20,5 @@ class RepositoryInterface(ABC):
         pass
 
     @abstractmethod
-    def add_invoice(self, customer: str, performances: List[dict]) -> int:
-        """Add a new invoice with performances. Returns invoice ID."""
+    def add_invoice(self, invoice: Invoice) -> int:
         pass

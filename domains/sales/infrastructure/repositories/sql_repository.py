@@ -67,30 +67,37 @@ class SQLRepository(RepositoryInterface):
             logging.error(f"Error writing report: {e}")
             raise
 
-    def add_invoice(self, customer: str, performances: List[dict]) -> int:
+    def add_invoice(self, invoice: DomainInvoice) -> int:
         from domains.sales.infrastructure.repositories.orm_models import Customer
         
         with Session(self.engine) as session:
+            invalid_play_ids = [
+                p.play_id for p in invoice.performances 
+                if p.play_id not in self.get_plays_dict()
+            ]
+            if invalid_play_ids:
+                raise ValueError(f"Invalid play_id(s): {invalid_play_ids}")
+            
             db_customer = session.exec(
-                select(Customer).where(Customer.name == customer)
+                select(Customer).where(Customer.name == invoice.customer)
             ).first()
             
             if not db_customer:
-                db_customer = Customer(name=customer)
+                db_customer = Customer(name=invoice.customer)
                 session.add(db_customer)
                 session.flush()
             
-            invoice = DBInvoice(customer_id=db_customer.id)
-            session.add(invoice)
+            db_invoice = DBInvoice(customer_id=db_customer.id)
+            session.add(db_invoice)
             session.flush()
             
-            for perf in performances:
+            for perf in invoice.performances:
                 db_perf = DBPerformance(
-                    invoice_id=invoice.id,
-                    play_id=perf["play_id"],
-                    audience=perf["audience"]
+                    invoice_id=db_invoice.id,
+                    play_id=perf.play_id,
+                    audience=perf.audience
                 )
                 session.add(db_perf)
             
             session.commit()
-            return invoice.id
+            return db_invoice.id

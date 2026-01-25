@@ -12,12 +12,12 @@ class InvoiceService:
         generator: StatementsGeneratorService, 
         renderer: TextRenderer
     ):
-        self._repository = repository
-        self._generator = generator
-        self._renderer = renderer
+        self.repository = repository
+        self.generator = generator
+        self.renderer = renderer
     
     def add_invoice(self, customer: str, performances: List[dict]) -> str:
-        invoice_id = self._repository.add_invoice(customer, performances)
+        plays = self.repository.get_plays_dict()
         
         invoice = Invoice(
             customer=customer,
@@ -26,8 +26,9 @@ class InvoiceService:
                 for p in performances
             ]
         )
-        plays = self._repository.get_plays_dict()
         
-        statements = self._generator.generate_statements([invoice], plays)
+        invoice_id = self.repository.add_invoice(invoice)
         
-        return self._renderer.text_statements_render(statements)
+        statements = self.generator.generate_statements([invoice], plays)
+        
+        return self.renderer.text_statements_render(statements)
