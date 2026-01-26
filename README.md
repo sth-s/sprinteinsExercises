@@ -40,7 +40,7 @@ python3 main.py analytics generate-report --name customer_reports
 # Saves to data/customer_reports.parquet, prints top 5
 
 # Analytics: print text report from parquet
-python3 main.py analytics print-text-report --name customer_reports [--save-as result]
+python3 main.py analytics print-text-report --name customer_reports --save-as result
 # Loads data/customer_reports.parquet, prints formatted statement
 ```
 
